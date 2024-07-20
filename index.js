@@ -42,7 +42,7 @@ app.post('/db-save', async (req, res) => {
         if(rateLimitMap.has(customer_name)){
             const lastHit= rateLimitMap.get(customer_map);
 
-            if(now-lastHit<12000){
+            if(time-lasthit<12000){
                 return res.status(429).json({error:'maximum limit exceeded'});
             }
         }
@@ -57,8 +57,8 @@ app.post('/db-save', async (req, res) => {
             });
         }
 
-        globalRateLimit.push(now);
-        
+        globalRateLimit.push(time);
+
 
         // Save to database
         const customer = new Customer({ customer_name, dob, monthly_income });
