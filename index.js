@@ -1,19 +1,22 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const Customer = require("./customerSchema"); // Adjust the path if necessary
+const Customer = require("./customerSchema"); 
 const app = express();
-const PORT = 3000;
+const PORT = 5000;
 
-require('dotenv').config(); // Load environment variables from .env file
+require('dotenv').config(); 
 
-app.use(express.json()); // Ensure this is included to parse JSON bodies
+app.use(express.json()); 
 
-// Use the MongoDB URI from environment variables
 const uri = process.env.MONGODB_URI;
 
 mongoose.connect(uri)
     .then(() => console.log('Connected to MongoDB Atlas'))
     .catch(err => console.error('Could not connect to MongoDB Atlas', err));
+
+const rateLimitMap = new Map();
+let globalRateLimit = [];
+
 
 // POST endpoint for saving data
 app.post('/db-save', async (req, res) => {
@@ -32,6 +35,30 @@ app.post('/db-save', async (req, res) => {
         if (age <= 15) {
             return res.status(400).json({ error: 'Age must be above 15.' });
         }
+
+
+        const time=Date.now();
+
+        if(rateLimitMap.has(customer_name)){
+            const lastHit= rateLimitMap.get(customer_map);
+
+            if(now-lastHit<12000){
+                return res.status(429).json({error:'maximum limit exceeded'});
+            }
+        }
+        
+        rateLimitMap.set(customer_name,now);
+
+        globalRateLimit=globalRateLimit.filter(timestamp=> now-timestamp < 300000);
+
+        if(globalRateLimit.length >=2){
+            return res.status(429).json({
+                error: 'limit of 2 req per min exceeded'
+            });
+        }
+
+        globalRateLimit.push(now);
+        
 
         // Save to database
         const customer = new Customer({ customer_name, dob, monthly_income });
