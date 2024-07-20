@@ -40,16 +40,16 @@ app.post('/db-save', async (req, res) => {
         const time=Date.now();
 
         if(rateLimitMap.has(customer_name)){
-            const lastHit= rateLimitMap.get(customer_map);
+            const lastHit= rateLimitMap.get(customer_name);
 
-            if(time-lasthit<12000){
+            if(time-lastHit<12000){
                 return res.status(429).json({error:'maximum limit exceeded'});
             }
         }
         
-        rateLimitMap.set(customer_name,now);
+        rateLimitMap.set(customer_name,time);
 
-        globalRateLimit=globalRateLimit.filter(timestamp=> now-timestamp < 300000);
+        globalRateLimit=globalRateLimit.filter(timestamp=> time-timestamp < 300000);
 
         if(globalRateLimit.length >=2){
             return res.status(429).json({
