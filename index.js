@@ -70,6 +70,42 @@ app.post('/db-save', async (req, res) => {
     }
 });
 
+app.post('/time-based-api',async(req,res)=>{
+    try{
+        const { customer_name, dob, monthly_income } = req.body;
+
+        if(!customer_name || !dob || !monthly_income){
+            return res.status(400).json({error:' all parameters are required'});
+        }
+
+        const now= new Date();
+        const day=now.getDay();
+        
+        console.log(day);
+
+        const hour=now.getHours();
+        console.log(hour);
+
+        if(day===1){
+            return res.status(403).json({ message: "Please don't use this API on Monday"});
+        }
+
+        if(hour>=8 && hour<15){
+            return res.status(403).json({message: "Please try after 3pm"});
+        }
+
+        // Save to database
+        const customer = new Customer({ customer_name, dob, monthly_income });
+        await customer.save();
+
+        res.status(200).json({ message: 'Data saved successfully!' });
+
+    }
+    catch(error){
+        res.status(500).json({ error: error.message});
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
