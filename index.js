@@ -106,6 +106,39 @@ app.post('/time-based-api',async(req,res)=>{
     }
 });
 
+app.get('/db-search',async(req,res)=>{
+
+    const startTime = process.hrtime();
+
+    try{
+        const currentDate=new Date();
+
+        const minDate = new Date(currentDate);
+        minDate.setFullYear(minDate.getFullYear() - 25); // 25 years ago
+        const maxDate = new Date(currentDate);
+        maxDate.setFullYear(maxDate.getFullYear() - 10); // 10 years ago
+
+        // Find customers whose dob is between minDate and maxDate
+        const customers = await Customer.find({
+            dob: { $gte: minDate, $lte: maxDate }
+        }).select('customer_name -_id');
+
+        const customerNames = customers.map(customer => customer.customer_name);
+
+        const endTime = process.hrtime(startTime);
+        const timeTaken = (endTime[0] * 1e9 + endTime[1]) / 1e9; 
+
+        res.status(200).json({
+            customer_names: customerNames,
+            time_taken: timeTaken.toFixed(3) 
+        });        
+    }
+    catch(error){
+        res.status(500).json({ error: error.message});
+    }
+});
+
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
