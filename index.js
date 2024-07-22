@@ -79,7 +79,7 @@ app.post('/time-based-api',async(req,res)=>{
         }
 
         const now= new Date();
-        const day=now.getDay();
+        const day=now.getDay(); // this will 0 for sunday 1 for monday and so on
         
         console.log(day);
 
