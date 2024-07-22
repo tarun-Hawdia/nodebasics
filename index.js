@@ -53,7 +53,7 @@ app.post('/db-save', async (req, res) => {
 
         if(globalRateLimit.length >=2){
             return res.status(429).json({
-                error: 'limit of 2 req per min exceeded'
+                error: 'limit of 2 req per five min exceeded'
             });
         }
 
