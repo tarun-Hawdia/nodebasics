@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Express API Frontend</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Express API Frontend</h1>
+        <div class="form-container">
+            <form id="dbSaveForm">
+                <h2>Save Data</h2>
+                <label for="customer_name">Customer Name:</label>
+                <input type="text" id="customer_name" name="customer_name" required>
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" name="dob" required>
+                <label for="monthly_income">Monthly Income:</label>
+                <input type="number" id="monthly_income" name="monthly_income" required>
+                <button type="submit">Save</button>
+                <div id="dbSaveResponse"></div>
+            </form>
+            <form id="timeBasedForm">
+                <h2>Time Based Save Data</h2>
+                <label for="time_customer_name">Customer Name:</label>
+                <input type="text" id="time_customer_name" name="customer_name" required>
+                <label for="time_dob">Date of Birth:</label>
+                <input type="date" id="time_dob" name="dob" required>
+                <label for="time_monthly_income">Monthly Income:</label>
+                <input type="number" id="time_monthly_income" name="monthly_income" required>
+                <button type="submit">Save</button>
+                <div id="timeBasedResponse"></div>
+            </form>
+            <form id="dbSearchForm">
+                <h2>Search Customers</h2>
+                <button type="submit">Search</button>
+                <div id="dbSearchResponse"></div>
+            </form>
+        </div>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>
+
