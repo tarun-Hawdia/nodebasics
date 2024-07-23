@@ -35,9 +35,15 @@ router.get('/auth/callback', async (req, res) => {
 
         const { access_token, refresh_token, expires_in } = response.data;
 
+        // Set access token expiration to 30 minutes (1800 seconds)
+        const accessTokenExpiresIn = 1800 * 1000; // 30 minutes in milliseconds
+        // Set refresh token expiration to 1 year (365 days)
+        const refreshTokenExpiresIn = 365 * 24 * 60 * 60 * 1000; // 1 year in milliseconds
+
         req.session.accessToken = access_token;
         req.session.refreshToken = refresh_token;
-        req.session.expiresAt = Date.now() + expires_in * 1000;
+        req.session.accessTokenExpiresAt = Date.now() + accessTokenExpiresIn;
+        req.session.refreshTokenExpiresAt = Date.now() + refreshTokenExpiresIn;
 
         res.redirect('/api-calls');
     } catch (error) {
@@ -55,7 +61,7 @@ router.get('/auth/logout', (req, res) => {
 // Middleware to check if user is authenticated
 function checkAuth(req, res, next) {
     if (req.session.accessToken) {
-        if (Date.now() < req.session.expiresAt) {
+        if (Date.now() < req.session.accessTokenExpiresAt) {
             next();
         } else {
             // Token expired, refresh token
@@ -68,8 +74,9 @@ function checkAuth(req, res, next) {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
             }).then(response => {
                 const { access_token, expires_in } = response.data;
+                const accessTokenExpiresIn = 1800 * 1000; // 30 minutes in milliseconds
                 req.session.accessToken = access_token;
-                req.session.expiresAt = Date.now() + expires_in * 1000;
+                req.session.accessTokenExpiresAt = Date.now() + accessTokenExpiresIn;
                 next();
             }).catch(() => res.redirect('/auth/login'));
         }
