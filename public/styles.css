@@ -6,16 +6,15 @@ body {
 }
 
 .container {
-    max-width: 600px;
-    margin: 50px auto;
+    width: 80%;
+    margin: 0 auto;
     padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 h1 {
     text-align: center;
-    margin-bottom: 20px;
 }
 
 .form-container {
@@ -27,24 +26,24 @@ h1 {
 form {
     display: flex;
     flex-direction: column;
-    gap: 10px;
 }
 
 label {
-    font-weight: bold;
+    margin-bottom: 5px;
 }
 
 input, button {
+    margin-bottom: 10px;
     padding: 10px;
-    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
 button {
-    background-color: #007BFF;
-    color: white;
+    background-color: #007bff;
+    color: #fff;
     border: none;
     cursor: pointer;
-    transition: background-color 0.3s;
 }
 
 button:hover {
@@ -53,6 +52,5 @@ button:hover {
 
 #dbSaveResponse, #timeBasedResponse, #dbSearchResponse {
     margin-top: 10px;
-    font-weight: bold;
-    color: #d9534f;
 }
+
